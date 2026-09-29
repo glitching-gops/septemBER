@@ -1,0 +1,3 @@
+# Phrases that separate a primary business name from an alternative/trade name.
+# Matched on the casefolded ASCII name with word boundaries.
+markers: [aka, a k a, a/k/a, dba, d b a, d/b/a, t/a, trading as, doing business as, fka, f k a, f/k/a, formerly, formerly known as, also known as, previously]

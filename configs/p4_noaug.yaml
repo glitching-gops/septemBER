@@ -1,0 +1,6 @@
+# D3 control arm: round-2 verifier WITHOUT the French augmentation (same D2 rows, same seeds).
+# Do NOT put country values in this file.
+extends: p4.yaml
+verifier:
+  key: bge-rr-v2-m3-r2na
+  aug_frac: 0.0

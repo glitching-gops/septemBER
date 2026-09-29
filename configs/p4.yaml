@@ -1,0 +1,31 @@
+# Final phase (P4, "Path 4"). Inherits p3.yaml (sub3_verifier) and redirects every writable path
+# to /scratch/user4/p4. The sub3 fallback (models, verifier weights, scores, submissions under
+# /scratch/user4/p3) is only ever read, through symlinks in /scratch/user4/p4/{models,verifier}.
+# Do NOT put country values in this file.
+extends: p3.yaml
+
+paths:
+  cache_dir: /scratch/user4/p4/cache
+  features_dir: /scratch/user4/p4/features
+  models_dir: /scratch/user4/p4/models
+  output_dir: /scratch/user4/p4/output
+
+verifier:
+  band: [0.005, 0.99]        # D4: widened E1b OOF-probability band
+  rescue_k: 3                # D4: top-k (by E1b p) of every S1 that sub3 predicts empty ...
+  rescue_max_p: 0.30         # ... or whose sub3 max p is below this
+  max_len: 128
+  holdout_frac: 0.15
+  n_folds: 2
+  seed: 42
+  scores: det
+  init_key: bge-rr-v2-m3     # D1: continue from the sub3 fold models
+  key: bge-rr-v2-m3-r2       # round-2 fold models / scores live under verifier/<key>
+  lr: 1.0e-5
+  eff_batch: 512
+  ckpt_every: 250
+  n_hard: 8
+  n_rand: 2
+  fn_dup: 2                  # D2: current false negatives enter twice
+  aug_frac: 0.15             # D3: French-style rewrite of ONE side of this share of pairs
+  tta: false                 # D4: dropped by the 2 h scoring rule (re-measured in stage A)

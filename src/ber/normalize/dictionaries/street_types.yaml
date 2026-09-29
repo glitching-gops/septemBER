@@ -1,0 +1,110 @@
+# Address abbreviation / street-type expansion, one dictionary for EN, IN and FR
+# terms, applied to every record regardless of country. Keys are canonical tokens,
+# values are variants (after casefold, anyascii and punctuation -> space).
+# Hand-written from domain knowledge plus abbreviations observed in the provided data.
+expand:
+  # --- EN street types and units
+  road: [rd, raod, roed]
+  avenue: [ave, avn, aven, avenu, avnue]
+  boulevard: [blvd, boul, boulv, bvd]
+  lane: [ln]
+  court: [ct, crt]
+  circle: [cir, circ]
+  parkway: [pkwy, pky, pkway]
+  highway: [hwy, hway, hiway]
+  square: [sq, sqr]
+  apartment: [apt, apts, aptmt, appt, appart, appartement]
+  floor: [fl, flr]
+  unit: [unt]
+  building: [bldg, bldng, bld]
+  trail: [trl]
+  crescent: [cres, cresc]
+  terrace: [terr]
+  expressway: [expy, expwy]
+  mount: [mt]
+  north: [n]
+  south: [s]
+  east: [e]
+  west: [w]
+  county: [cnty]
+  pobox: [po box, p o box, post box, pb]
+  pmb: [p m b]
+  # --- IN
+  marg: [marg, mrg]
+  nagar: [ngr, nager, nagr]
+  near: [nr, nearby]
+  opposite: [opp, oppo, opp.]
+  house: [h no, hno, h, house no, h no., hn]
+  plot: [p no, plot no, pl no]
+  door: [d no, door no, dno]
+  flat: [flat no, f no]
+  shop: [shop no, sh no]
+  survey: [s no, sy no, survey no, sr no, sno]
+  khasra: [kh no, khasra no, kh]
+  ward: [ward no, wd no]
+  sector: [sec, sect, sctr]
+  block: [blk, blck]
+  phase: [ph]
+  extension: [extn, ext]
+  colony: [colny]
+  society: [soc, socy]
+  cooperative: [co op, coop, co operative]
+  housing: [hsg]
+  industrial: [indl, industrial area, ind area]
+  district: [dist, distt, dt]
+  taluka: [tq, tal, taluk, tehsil, teh]
+  village: [vill, vil, vpo, gram]
+  postoffice: [p o, po, post]
+  policestation: [p s, ps]
+  careof: [c o]
+  sonof: [s o]
+  wifeof: [w o]
+  daughterof: [d o]
+  bypass: [bye pass, by pass]
+  bazar: [bazaar, bazzar, bazzaar]
+  chowk: [chawk]
+  cross: [crs]
+  groundfloor: [gf, grnd flr, ground floor]
+  firstfloor: [ff, 1st floor]
+  secondfloor: [sf, 2nd floor]
+  pocket: [pkt]
+  cooperativehousingsociety: [chs, co op hsg soc, cooperative housing society]
+  township: [twp, tship]
+  doctor: [docteur, doct]
+  lowergroundfloor: [lgf]
+  uppergroundfloor: [ugf]
+  # --- FR
+  rue: [rue]
+  allee: [all, alle, allee, al]
+  chemin: [ch, che, chem, chemin]
+  place: [pl]
+  impasse: [imp, impa]
+  route: [rte]
+  faubourg: [fbg, faub]
+  quai: [qu, qai]
+  cours: [crs.]
+  residence: [res, resid]
+  lieudit: [ld, lieu dit]
+  zone: [za, zi, zac, zae]
+  etage: [etg]
+  batiment: [bat, bati]
+  cedex: [cedex]
+# Context-sensitive abbreviations resolved by position (see ber.normalize.addresses):
+#   st  -> street  if last in its comma segment, or followed by a number / unit marker
+#          saint   otherwise (e.g. "st paul", "st nazaire")
+#   ste -> suite   if followed by a number, else sainte
+#   dr  -> drive   if last in its comma segment or followed by a unit marker, else doctor
+#   r   -> rue     if preceded by a house number (or bis/ter) or first in a segment and
+#          followed by a de/du/des/la/le/l particle or a name token; else kept
+#   bd  -> boulevard (FR); av -> avenue
+context:
+  st: {street_if_last: street, else: saint}
+  ste: {number_next: suite, else: sainte}
+  dr: {street_if_last: drive, else: doctor}
+  r: rue
+  bd: boulevard
+  av: avenue
+unit_markers: [apt, apartment, unit, suite, ste, floor, fl, flr, pmb, "#", "no", room, rm, bldg, building]
+house_suffixes: [bis, ter, quater, a, b, c]
+placeholders: ["null", "n a", na, none, nil, "not available", unknown, "-", "--", "..."]
+number_markers: ["no", "n", nr, num, number, "#"]

@@ -1,0 +1,4 @@
+# Honorific / courtesy prefixes stripped from the START of a name only (repeatable),
+# e.g. "Dr ... Bohra Holding" -> "bohra holding", "M/s Hitech ..." -> "hitech ...".
+# "m/s" and "messrs" are handled before punctuation removal as well.
+prefixes: [dr, m s, ms, messrs, messers, mr, mrs, mr and mrs, shri, sri, shree, smt, srimati, kum, the, dr., m/s]

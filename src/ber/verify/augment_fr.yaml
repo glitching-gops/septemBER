@@ -1,0 +1,37 @@
+# D3 verifier-training augmentation: our French dictionary (v2) applied IN REVERSE.
+# Hand-written. Each left-hand term (case-insensitive, whole word) is rewritten to one of the
+# French renderings on the right, chosen at random; every French target is a key or variant
+# of src/ber/normalize/dictionaries. This optional augmentation is not used by Sub D.
+# Labels are never changed. Applied to ONE side of a pair, only in verifier TRAINING rows.
+street:
+  street: [rue, r, r.]
+  st: [rue, r]            # only when it closes a street segment (see augment._ST_END)
+  road: [route, rte]
+  rd: [route, rte]
+  avenue: [avenue, av]
+  ave: [avenue, av]
+  boulevard: [bd, boulevard]
+  blvd: [bd, boulevard]
+  lane: [allee, all]
+  ln: [allee]
+legal:                    # longest match first
+  private limited: [sarl, sas, sa, eurl]
+  pvt ltd: [sarl, sas, sa, eurl]
+  pvt. ltd.: [sarl, sas, sa, eurl]
+  llc: [sarl, sas, eurl]
+  inc: [sa, sas]
+  inc.: [sa, sas]
+  corp: [sa, sas]
+  corporation: [sa, sas]
+  ltd: [sarl, sas, sa]
+  ltd.: [sarl, sas, sa]
+  limited: [sarl, sas, sa]
+title:
+  dr: [docteur]
+  dr.: [docteur]
+# house-number presentation seen in the unlabelled French-style records ("N° 32 R DES ...",
+# "rue X 12"); probabilities per augmented record
+number_prefix: ["N° ", "NO ", "Nº "]
+p_number_prefix: 0.35
+p_number_after: 0.25      # "12 Rue X, City" -> "Rue X 12, City"
+p_upper_addr: 0.5         # French-style addresses are mostly upper case

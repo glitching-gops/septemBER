@@ -1,0 +1,52 @@
+# Central configuration for the BER pipeline. Paths are resolved relative to
+# project_root when not absolute. Do NOT put country values in this file.
+# "auto" resolves to the repository root.
+project_root: auto
+raw_root: data/raw/student_resource
+
+data:
+  train:
+    source1: dataset/train/train_source1.tsv
+    source2: dataset/train/train_source2.tsv
+    source3: dataset/train/train_source3.tsv
+    ground_truth: dataset/train/train_ground_truth.tsv
+  test:
+    source1: dataset/test/test_source1.tsv
+    source2: dataset/test/test_source2.tsv
+    source3: dataset/test/test_source3.tsv
+  test_dir: dataset/test
+  validator: utils/validate_submission.py
+  doc_template: Documentation_template.md
+
+paths:
+  output_dir: /scratch/user4/ber/output   # copied into the submission package at the end
+  reports_dir: reports
+  runs_dir: runs
+  runs_ledger: runs/runs.csv
+  splits: runs/splits.parquet
+  loco: runs/loco.parquet
+  # Large, regenerable artefacts live on /scratch (root disk filled up on 2026-09-25).
+  # BER_SCRATCH_ROOT remaps /scratch/user4 to a local artifact folder.
+  # Run jobs with TMPDIR=/scratch/user4/ber/tmp (or the remapped path).
+  cache_dir: /scratch/user4/ber/cache
+
+seed: 42
+n_folds: 5
+
+eda:
+  n_negative_pairs: 200000   # random same-country non-pairs for section D
+  n_positive_pairs: 200000   # cap on true pairs scored in section D
+  n_example_pairs: 15
+  n_example_singletons: 10
+  truncate: 80
+
+# Shared college server: every parallel call goes through ber.compute.
+compute:
+  n_jobs: 32
+  max_ram_gb: 200
+  # GPU-first policy (mandatory from P2, see AGENTS.md): CUDA is the default device for every
+  # stage with a GPU implementation; CPU code paths are off by default and never a silent fallback.
+  use_gpu: true
+  cpu_fallback: false      # CUDA unavailable / OOM -> stop and report, never fall back to CPU
+  gpu_ids: [1]             # owner's choice on 2026-09-25 (GPU 0 busy with another user's job)
+  max_vram_gb: 40          # stay under 40 GB unless both GPUs are completely idle

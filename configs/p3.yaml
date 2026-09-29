@@ -1,0 +1,29 @@
+# P3-P6 configuration. Inherits p2.yaml (the Sub1 / E1b setup) and redirects every writable
+# path to /scratch/user4/p3, so nothing here can overwrite a P2 or reproduction artefact.
+# Upstream P2 inputs that P3 reuses unchanged are read through p2_* paths below.
+# Do NOT put country values in this file.
+extends: p2.yaml
+
+paths:
+  cache_dir: /scratch/user4/p3/cache
+  features_dir: /scratch/user4/p3/features
+  models_dir: /scratch/user4/p3/models
+  output_dir: /scratch/user4/p3/output
+  # read-only P2 inputs (Sub1): candidates, embeddings, norm v1, E1b bundle, f2 features
+  p2_cache_dir: /scratch/user4/ber/cache
+  p2_features_dir: /scratch/user4/p2/features
+  p2_models_dir: /scratch/user4/p2/models
+
+versions:
+  norm_version: v1
+  blocker_set: dense_b6b7
+  K: 15
+  feature_version: f2
+
+verifier:
+  band: [0.02, 0.95]        # E1b OOF probability band scored by the verifier (D6)
+  max_len: 128
+  holdout_frac: 0.15         # D8: dev S1 never used to train verifier or retrained XGBoost
+  n_folds: 2                 # verifier_fold = xgb_fold mod 2 (D7)
+  seed: 42
+  scores: det                # verifier scores from the deterministic rescore (fold{j}/det)

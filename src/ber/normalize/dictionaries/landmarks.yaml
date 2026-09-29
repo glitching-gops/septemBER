@@ -1,0 +1,4 @@
+# Landmark triggers: trigger + up to max_tokens following tokens (within the same
+# comma segment) go to the `landmark` column and are removed from `addr_core`.
+triggers: [near, nr, opposite, opp, behind, beside, next to, landmark, in front of, adjacent to, adj, adjoining, besides]
+max_tokens: 4

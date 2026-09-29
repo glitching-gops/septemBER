@@ -1,0 +1,58 @@
+# P2 configuration. Inherits configs/default.yaml and overrides only what P2 changes.
+# Do NOT put country values in this file.
+extends: default.yaml
+
+paths:
+  # P2 artefacts live under /scratch/user4/p2 (the root disk is ~99% full and
+  # /scratch is only writable under the user's own directory).
+  cache_dir: /scratch/user4/p2/cache
+  features_dir: /scratch/user4/p2/features
+  models_dir: /scratch/user4/p2/models
+  final_dir: /scratch/user4/p2/final
+  submissions_dir: submissions
+  output_dir: /scratch/user4/p2/output
+
+compute:
+  # GPU-first (P2, mandatory): every stage picks the least-loaded GPU at start-up and
+  # keeps gpu_reserve_gb free on it. CUDA unavailable or too busy -> stop, never CPU.
+  gpu_auto: true
+  gpu_reserve_gb: 8
+  min_free_vram_gb: 15     # below this on every GPU, pause and ask the owner
+  max_vram_gb: 40
+  shards: 64               # S1-hash shards for the feature stage (RAM cap 200 GB)
+  abort_rss_gb: 180
+
+# Cache key for the pair-feature stage: (norm_version, blocker_set, K, feature_version).
+# Bump the relevant one whenever its inputs change, so stale shards are never reused.
+versions:
+  norm_version: v1          # v2 once the E4 dictionaries land
+  blocker_set: dense_b6b7   # B6 name + B6 address + B7 reverse (the P1 test pipeline)
+  K: 15
+  feature_version: f1       # f1 = P1 26 features; f2 = f1 minus dead + GPU token features
+
+# D1: transductive statistics. IDF is fitted per split on that split's own unlabelled
+# inputs (the declared grey area). Set true to fit IDF on train only and reuse it on test.
+train_only_idf: false
+
+xgb:
+  objective: binary:logistic
+  device: cuda
+  tree_method: hist
+  n_estimators: 600
+  early_stopping_rounds: 40
+  max_depth: 8
+  learning_rate: 0.08
+  subsample: 0.8
+  colsample_bytree: 0.8
+  min_child_weight: 10
+  max_bin: 256
+  eval_metric: aucpr
+
+nil:
+  enabled: true
+  n_estimators: 400
+  max_depth: 6
+  learning_rate: 0.06
+  # Scalar prior-shift knob on the NIL probability (0 = as calibrated). The single
+  # leaderboard probe allowed by the brief moves this and nothing else.
+  prior_shift: 0.0

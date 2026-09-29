@@ -1,0 +1,2 @@
+# Top-level domains stripped from domain-like names ("mercantile.co.in" -> "mercantile").
+tlds: [co.in, org.in, net.in, co.uk, com, in, net, org, fr, biz, info, co, io, us, online, store, shop, site, tech, app]

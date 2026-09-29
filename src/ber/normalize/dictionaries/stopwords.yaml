@@ -1,0 +1,3 @@
+# Common words ignored by the unknown-token report (not removed from records).
+# English, French and Hindi-in-Latin function words; hand-written.
+words: [and, the, of, for, in, at, "on", to, by, with, a, an, de, du, des, la, le, les, l, d, et, au, aux, en, sur, ka, ki, ke, "no", via, near]

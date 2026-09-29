@@ -1,0 +1,15 @@
+.venv/
+data/*
+!data/DATA_MANIFEST.md
+output/*
+!output/matching_results.tsv
+!output/candidate_pairs.tsv
+runs/*.parquet
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.pytest_cache/
+*.egg-info/
+graphify-out/
+CLAUDE.md
+submissions/

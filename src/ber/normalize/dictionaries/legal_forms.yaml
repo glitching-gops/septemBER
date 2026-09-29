@@ -1,0 +1,33 @@
+# Legal-form lexicon: token (after casefold, anyascii, punctuation->space and
+# joining of dotted single-letter runs such as "l.l.c.") -> legal atom.
+# Atoms are combined into canonical classes by ber.normalize.names:
+#   PRIVATE + LIMITED -> PVT_LTD, PRIVATE alone -> PVT_LTD, LIMITED alone -> LTD,
+#   all other atoms map 1:1 to their class.
+# Applied to EVERY record regardless of country (country-agnostic).
+# Sources: hand-written from domain knowledge, informed by the open-source legal-form
+# lists in `cleanco` (MIT) and `rigour` (MIT); nothing was downloaded. Indic
+# transliterations were added from anyascii output for tokens observed in the
+# provided train data (e.g. Devanagari "प्राइवेट" -> "praivet").
+atoms:
+  PRIVATE: [private, pvt, pvte, prv, prvt, privat, praivet, piraivet, praibhet, praivrr, pra, prayivet]
+  LIMITED: [limited, ltd, ltda, limitted, limted, lmtd, limitet, limirrd, li, limi]
+  INC: [inc, incorporated, incorporation]
+  CORP: [corp, corporation, corpn]
+  LLC: [llc, lllc]
+  PLLC: [pllc]
+  LLP: [llp, elelpi, elelpii]
+  LP: [lp]
+  CO: [co, company, cie]
+  PLC: [plc]
+  PC: [pc, psc]
+  SARL: [sarl]
+  SAS: [sas]
+  SASU: [sasu]
+  SA: [sa]
+  EURL: [eurl]
+  SNC: [snc]
+  SCI: [sci]
+  SELARL: [selarl]
+# Tokens that are legal atoms only when they are NOT the whole name (a company can
+# legitimately be called "Co" or "SA"); the name keeps them if nothing else remains.
+ambiguous_atoms: [co, sa, li, pra, pc, lp, sci]
